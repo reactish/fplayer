@@ -262,12 +262,6 @@ class __FPanel2State extends State<_FPanel2> {
   // StreamSubscription? connectTypeListener;
   // ConnectivityResult? connectivityResult;
 
-  final Battery battery = Battery();
-
-  StreamSubscription? batteryStateListener;
-  BatteryState? batteryState;
-  int batteryLevel = 0;
-  late Timer batteryTimer;
 
   static const FSliderColors sliderColors = FSliderColors(
     cursorColor: Color(0xFF07B9B9),
@@ -292,20 +286,6 @@ class __FPanel2State extends State<_FPanel2> {
     //     connectivityResult = result;
     //   });
     // });
-
-    batteryStateListener =
-        battery.onBatteryStateChanged.listen((BatteryState state) {
-      if (batteryState == state) return;
-      setState(() {
-        batteryState = state;
-      });
-    });
-
-    getBatteryLevel();
-
-    batteryTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      getBatteryLevel();
-    });
 
     _valController = StreamController.broadcast();
 
@@ -381,7 +361,6 @@ class __FPanel2State extends State<_FPanel2> {
   @override
   void dispose() {
     super.dispose();
-    batteryTimer.cancel();
     _valController.close();
     _hideTimer?.cancel();
     _currentPosSubs?.cancel();
@@ -389,17 +368,7 @@ class __FPanel2State extends State<_FPanel2> {
     _bufferPercunt.cancel();
     _bufferingSubs.cancel();
     // connectTypeListener?.cancel();
-    batteryStateListener?.cancel();
     player.removeListener(_playerValueChanged);
-  }
-
-  getBatteryLevel() async {
-    final level = await battery.batteryLevel;
-    if (mounted) {
-      setState(() {
-        batteryLevel = level;
-      });
-    }
   }
 
   double dura2double(Duration d) {
@@ -966,8 +935,6 @@ class __FPanel2State extends State<_FPanel2> {
                 buildTitle(),
                 const Spacer(),
                 buildTimeNow(),
-                buildPower(),
-                // buildNetConnect(),
                 buildSetting(context),
               ],
             ),
@@ -1520,100 +1487,6 @@ class __FPanel2State extends State<_FPanel2> {
       ),
     );
   }
-
-  // 电量显示
-  Widget buildPower() {
-    if (batteryState == BatteryState.charging) {
-      return Row(
-        children: [
-          Text(
-            '$batteryLevel%',
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 10,
-            ),
-          ),
-          Icon(
-            Icons.battery_charging_full_rounded,
-            color: Theme.of(context).primaryColor,
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          Text(
-            '$batteryLevel%',
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 10,
-            ),
-          ),
-          if (batteryLevel < 14)
-            Icon(
-              Icons.battery_1_bar_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-          else if (batteryLevel < 28)
-            Icon(
-              Icons.battery_2_bar_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-          else if (batteryLevel < 42)
-            Icon(
-              Icons.battery_3_bar_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-          else if (batteryLevel < 56)
-            Icon(
-              Icons.battery_4_bar_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-          else if (batteryLevel < 70)
-            Icon(
-              Icons.battery_5_bar_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-          else if (batteryLevel < 84)
-            Icon(
-              Icons.battery_6_bar_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-          else
-            Icon(
-              Icons.battery_full_rounded,
-              color: Theme.of(context).primaryColor,
-            )
-        ],
-      );
-    }
-  }
-
-  // 5G、WIFI、无网络
-  // Widget buildNetConnect() {
-  //   return IconButton(
-  //     padding: EdgeInsets.zero,
-  //     icon: Visibility(
-  //       visible: connectivityResult == ConnectivityResult.none,
-  //       replacement: Visibility(
-  //         visible: connectivityResult == ConnectivityResult.mobile,
-  //         replacement: const Text(
-  //           'WIFI',
-  //           style: TextStyle(color: Color(0xFF07B9B9)),
-  //         ),
-  //         child: const Text(
-  //           '5G',
-  //           style: TextStyle(color: Color(0xFF07B9B9)),
-  //         ),
-  //       ),
-  //       child: const Icon(
-  //         Icons.signal_cellular_connected_no_internet_4_bar_rounded,
-  //         color: Color(0xFF07B9B9),
-  //       ),
-  //     ),
-  //     onPressed: null,
-  //   );
-  // }
 
   // 设置
   Widget buildSetting(BuildContext context) {
