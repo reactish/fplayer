@@ -1289,7 +1289,7 @@ class __FPanel2State extends State<_FPanel2> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: const Text(
-          "2倍速播放中",
+          "2x Speed",
           style: TextStyle(
             color: Color.fromRGBO(255, 255, 255, .8),
             fontSize: 15,
@@ -1356,9 +1356,9 @@ class __FPanel2State extends State<_FPanel2> {
       onDoubleTap: widget.doubleTap && !lock ? onDoubleTapFun : null,
       onLongPressUp: _playing && !lock ? onLongPressUpFun : null,
       onLongPress: _playing && !lock ? onLongPressFun : null,
-      onVerticalDragUpdate: !lock ? onVerticalDragUpdateFun : null,
-      onVerticalDragStart: !lock ? onVerticalDragStartFun : null,
-      onVerticalDragEnd: !lock ? onVerticalDragEndFun : null,
+      // onVerticalDragUpdate: !lock ? onVerticalDragUpdateFun : null,
+      // onVerticalDragStart: !lock ? onVerticalDragStartFun : null,
+      // onVerticalDragEnd: !lock ? onVerticalDragEndFun : null,
       onHorizontalDragStart: (d) =>
           !lock ? onVideoTimeChangeUpdate.call(currentValue) : null,
       onHorizontalDragUpdate: (d) {
