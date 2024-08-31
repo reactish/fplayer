@@ -224,8 +224,8 @@ class __FPanel2State extends State<_FPanel2> {
   };
 
   Map<String, bool> captionList = {
-    "开": true,
-    "关": false,
+    "On": true,
+    "Off": false,
   };
 
   Map<String, ResolutionItem> resolutionList = {
@@ -647,7 +647,7 @@ class __FPanel2State extends State<_FPanel2> {
               });
             },
             child: Text(
-              '字幕',
+              'Subs',
               style: TextStyle(
                 color: Theme.of(context).primaryColorDark,
               ),
@@ -666,7 +666,7 @@ class __FPanel2State extends State<_FPanel2> {
             });
           },
           child: Text(
-            '倍速',
+            'Speed',
             style: TextStyle(
               color: Theme.of(context).primaryColorDark,
             ),
@@ -1340,7 +1340,7 @@ class __FPanel2State extends State<_FPanel2> {
             ),
           ),
           Text(
-            "缓冲中 $_bufferingPro %",
+            "Loading $_bufferingPro%",
             style: const TextStyle(
               color: Colors.white70,
               fontSize: 14,
