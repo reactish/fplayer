@@ -137,6 +137,8 @@ class _FPanel2 extends StatefulWidget {
   final void Function()? onVideoEnd;
   final void Function()? onVideoPrepared;
   final void Function()? onVideoTimeChange;
+  // custom RWL props
+  final bool isLive;
 
   const _FPanel2({
     Key? key,
@@ -165,6 +167,7 @@ class _FPanel2 extends StatefulWidget {
     this.onVideoEnd,
     this.onVideoPrepared,
     this.onVideoTimeChange,
+    this.isLive = false,
   })  : assert(hideDuration > 0 && hideDuration < 10000),
         super(key: key);
 
@@ -1354,23 +1357,23 @@ class __FPanel2State extends State<_FPanel2> {
       onTap: onTapFun,
       behavior: HitTestBehavior.opaque,
       onDoubleTap: widget.doubleTap && !lock ? onDoubleTapFun : null,
-      onLongPressUp: _playing && !lock ? onLongPressUpFun : null,
-      onLongPress: _playing && !lock ? onLongPressFun : null,
+      onLongPressUp: !widget.isLive && _playing && !lock ? onLongPressUpFun : null,
+      onLongPress: !widget.isLive && _playing && !lock ? onLongPressFun : null,
       // onVerticalDragUpdate: !lock ? onVerticalDragUpdateFun : null,
       // onVerticalDragStart: !lock ? onVerticalDragStartFun : null,
       // onVerticalDragEnd: !lock ? onVerticalDragEndFun : null,
       onHorizontalDragStart: (d) =>
-          !lock ? onVideoTimeChangeUpdate.call(currentValue) : null,
-      onHorizontalDragUpdate: (d) {
+          (!lock && !widget.isLive) ? onVideoTimeChangeUpdate.call(currentValue) : null,
+      onHorizontalDragUpdate: (!widget.isLive) ? (d) {
         double deltaDx = d.delta.dx;
         if (deltaDx == 0) {
           return; // 避免某些手机会返回0.0
         }
         var dragValue = (deltaDx * 4000) + currentValue;
         !lock ? onVideoTimeChangeUpdate.call(dragValue) : null;
-      },
+      } : null,
       onHorizontalDragEnd: (d) =>
-          !lock ? onVideoTimeChangeEnd.call(currentValue) : null,
+          (!lock && !widget.isLive) ? onVideoTimeChangeEnd.call(currentValue) : null,
       child: Stack(
         children: <Widget>[
           AbsorbPointer(
