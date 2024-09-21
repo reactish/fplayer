@@ -57,6 +57,9 @@ FPanelWidgetBuilder fPanelBuilder({
 
   /// 视频时间更新
   final void Function()? onVideoTimeChange,
+
+  /// RWL custom
+  final bool isLive = false,
 }) {
   return (FPlayer player, FData data, BuildContext context, Size viewSize,
       Rect texturePos) {
@@ -87,6 +90,7 @@ FPanelWidgetBuilder fPanelBuilder({
       onVideoEnd: onVideoEnd,
       onVideoPrepared: onVideoPrepared,
       onVideoTimeChange: onVideoTimeChange,
+      isLive: isLive,
     );
   };
 }
